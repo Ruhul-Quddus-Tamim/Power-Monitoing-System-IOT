@@ -1,0 +1,10 @@
+{
+    "humidity": 69.2,
+    "temperature": 30.3,
+    "ac_on": true,
+    "voltage": 232.2,
+    "current": 0.04,
+    "energy": 0.004,
+    "frequency": 49.9,
+    "pf": 0
+}

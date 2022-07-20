@@ -1,1 +1,696 @@
-# Power-Monitoing-System-IOT
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="icon" type="image/png" href="./favicon.ico">
+    <title>Dashboard - Power Monitoring</title>
+    <!-- CSS files -->
+    <link href="./dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="./dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="./dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="./dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="./dist/css/demo.min.css" rel="stylesheet"/>
+  </head>
+  <body class="antialiased">
+    <div class="wrapper">
+      <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="navbar-brand navbar-brand-autodark">
+            <a href=".">
+              <img src="./logo-white.svg" width="110" height="32" alt="Power Monitoring" class="navbar-brand-image">
+            </a>
+          </h1>
+          <div class="navbar-nav flex-row d-lg-none">
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                <span class="avatar avatar-sm" style="background-image: url(./img_avatar.png)"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a href="#" class="dropdown-item">Settings</a>
+                <a href="{{url_for('sign_out')}}" class="dropdown-item">Logout</a>
+              </div>
+            </div>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav pt-lg-3">
+              <li class="nav-item">
+                <a class="nav-link" href="{{url_for('index')}}" >
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Home
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+      <div class="page-wrapper">
+        <div class="container-fluid">
+          <!-- Page title -->
+          <div class="page-header d-print-none">
+            <div class="row align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  Overview
+                </div>
+                <h2 class="page-title">
+                  Power Monitoring
+                </h2>
+              </div>
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                  <span class="d-none d-sm-inline">
+                    <a href="{{url_for('sign_out')}}" class="btn btn-white">
+                      Sign Out
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="row row-deck row-cards">
+              <div class="col-md-8">
+                <div class="row">
+                  <img style="-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 25%);" src="http://104.248.147.39:8088/">
+                
+                  <span class="dropdown text-end" style="display: flex; align-items: center;">
+                    <label class="page-title">AC Mode : </label>
+                    <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">{{ac_mode}}</button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="#">
+                        Auto
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        On
+                      </a>
+                      <a class="dropdown-item" href="#">
+                        Off
+                      </a>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row row-cards">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div class="subheader">Humidity</div>
+                          <div class="ms-auto lh-1">
+                            <div class="dropdown">
+                              <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                              <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item active" href="#">Last hour</a>
+                                <a class="dropdown-item" href="#">Last days</a>
+                                <a class="dropdown-item" href="#">Last week</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-baseline">
+                          <div class="h1 mb-0 me-2"></div>
+                        </div>
+                      </div>
+                      <div style="height:10vh">
+                        <canvas id="chart-humidity-bg" class="chart-sm"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div class="subheader">Temperature</div>
+                          <div class="ms-auto lh-1">
+                            <div class="dropdown">
+                              <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                              <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item active" href="#">Last hour</a>
+                                <a class="dropdown-item" href="#">Last days</a>
+                                <a class="dropdown-item" href="#">Last week</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-baseline">
+                          <div class="h1 mb-0 me-2"></div>
+                        </div>
+                      </div>
+                      <div style="height:10vh">
+                        <canvas id="chart-temperature-bg" class="chart-sm"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div class="subheader">Aircond</div>
+                          <div class="ms-auto lh-1">
+                            <div class="dropdown">
+                              <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                              <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item active" href="#">Last hour</a>
+                                <a class="dropdown-item" href="#">Last days</a>
+                                <a class="dropdown-item" href="#">Last week</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-baseline">
+                          <div class="h1 mb-0 me-2"></div>
+                        </div>
+                      </div>
+                      <div style="height:10vh">
+                        <canvas id="chart-ac_on-bg" class="chart-sm"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <h2 class="page-title">
+                  Device 1
+                </h2>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Voltage</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-voltage-bg" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Current</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-current-bg" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Total Energy Usage</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div class="text-center" style="height:10vh">
+                    <div id="power_usage" class="h1 m-0">{{power_usage}}</div>
+                    <div class="text-muted mb-3">kWh</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Frequency</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-frequency-bg" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">PF</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-pf-bg" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <h2 class="page-title"><br>
+                  Device 2
+                </h2>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Voltage</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-voltage-bg_2" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Current</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-current-bg_2" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Total Energy Usage</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div class="text-center" style="height:10vh">
+                    <div id="power_usage_2" class="h1 m-0">{{power_usage}}</div>
+                    <div class="text-muted mb-3">kWh</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">Frequency</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-frequency-bg_2" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="subheader">PF</div>
+                      <div class="ms-auto lh-1">
+                        <div class="dropdown">
+                          <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last hour</a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item active" href="#">Last hour</a>
+                            <a class="dropdown-item" href="#">Last days</a>
+                            <a class="dropdown-item" href="#">Last week</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                      <div class="h1 mb-0 me-2"></div>
+                    </div>
+                  </div>
+                  <div style="height:10vh">
+                    <canvas id="chart-pf-bg_2" class="chart-sm"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    Copyright &copy; 2021
+                    <a href="." class="link-secondary">Power Monitoring</a>.
+                    All rights reserved.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="./dist/libs/apexcharts/dist/apexcharts.min.js"></script>
+    <script src="./dist/libs/chartjs/dist/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <!-- Tabler Core -->
+    <script src="./dist/js/tabler.min.js"></script>
+    <!-- Initialize Sensors Reading -->
+    <script>
+      var device_data = {{device_data | safe}};
+      var power_data = parseFloat({{power_usage}});
+      var axis_limit= {
+        "frequency":{
+          "min":0,
+          "max":60
+        },
+        "voltage":{
+          "min":0,
+          "max":250
+        },
+        "temperature":{
+          "min":0,
+          "max":100
+        },
+        "humidity":{
+          "min":0,
+          "max":100
+        }
+      }
+
+      function getMin(sensor_name){
+        if(axis_limit.hasOwnProperty(sensor_name)){
+          return axis_limit[sensor_name]["min"]
+        }else{
+          return Math.min(...device_data[sensor_name])
+        }
+      };
+
+      function getMax(sensor_name){
+        if(axis_limit.hasOwnProperty(sensor_name)){
+          return axis_limit[sensor_name]["max"]
+        }else{
+          return Math.max(...device_data[sensor_name])
+        }
+      };
+    </script>
+    <script>
+      var sensor_chart = [];
+      for (var sensor_name in device_data){
+        if (sensor_name === "timestamp" || sensor_name === "energy") { continue; };
+        var element_id = 'chart-'+sensor_name+'-bg';
+        sensor_chart[sensor_name] = new Chart(document.getElementById(element_id).getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: device_data["timestamp"],
+                datasets: [{
+                    label: 'level',
+                    data: device_data[sensor_name],
+                    borderColor: 'rgb(50,118,199)',
+                    backgroundColor: 'rgba(219,231,245,255)',
+                    fill: 'origin',
+                    lineTension: 1,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                  mode: 'nearest',
+                  intersect: false
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false
+                },
+                plugins:{
+                  legend: {
+                    display: false
+                  }
+                },
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      // Luxon format string
+                      tooltipFormat: 'ccc HH:mm:ss'
+                    },
+                    display: false
+                  },
+                  y: {
+                    display: false,
+                    suggestedMin: getMin(sensor_name) ,
+                    suggestedMax: getMax(sensor_name) 
+                  }
+                }
+          }
+      });
+
+      };
+
+      sensor_chart["ac_on"].data.datasets[0].stepped = true;
+      sensor_chart["ac_on"].update();
+    </script>
+    <script>
+      for (var sensor_name in device_data){
+        if (sensor_name === "timestamp" || sensor_name === "energy" || sensor_name === "humidity" || sensor_name === "temperature" || sensor_name === "ac_on") { continue; };
+        var element_id = 'chart-'+sensor_name+'-bg_2';
+        sensor_name_2 = sensor_name+'_2';
+        sensor_chart[sensor_name_2] = new Chart(document.getElementById(element_id).getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: device_data["timestamp"],
+                datasets: [{
+                    label: 'level',
+                    data: device_data[sensor_name],
+                    borderColor: 'rgb(50,118,199)',
+                    backgroundColor: 'rgba(219,231,245,255)',
+                    fill: 'origin',
+                    lineTension: 1,
+                    pointRadius: 0,
+                    pointHoverRadius: 3
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                  mode: 'nearest',
+                  intersect: false
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false
+                },
+                plugins:{
+                  legend: {
+                    display: false
+                  }
+                },
+                scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      // Luxon format string
+                      tooltipFormat: 'ccc HH:mm:ss'
+                    },
+                    display: false
+                  },
+                  y: {
+                    display: false,
+                    suggestedMin: getMin(sensor_name),
+                    suggestedMax: getMax(sensor_name) 
+                  }
+                }
+          }
+      });
+
+      };
+    </script>
+    <script src="./dist/js/socket.io.min.js"></script>
+    <script>
+      const socket = io("{{url_for('index')}}", {
+        reconnectionDelayMax: 10000,
+      });
+
+      socket.on("connect", () => {
+        console.log("Connected to stream socket");
+      });
+
+      socket.on("device_data", (data) => {
+        new_data = JSON.parse(data);
+
+        for (var sensor_name in device_data){
+          if (sensor_name === "timestamp" || sensor_name === "energy") { continue; }
+
+          var timestamps = sensor_chart[sensor_name].data.labels;
+          //timestamps.shift();
+          timestamps.push(new_data["created_ts"]);
+          var sensor_data = sensor_chart[sensor_name].data.datasets[0].data;
+          //sensor_data.shift();
+          sensor_data.push(new_data[sensor_name]);
+
+          sensor_chart[sensor_name].data.labels = timestamps;
+          sensor_chart[sensor_name].data.datasets[0].data = sensor_data;
+          sensor_chart[sensor_name].update();
+        }
+      });
+
+      socket.on("power_data", (data) => {
+        power_data += parseFloat(data);
+        $("#power_usage").html(power_data.toFixed(2));
+      });
+    </script>
+    <script src="./dist/js/jquery.min.js"></script>
+    <script>
+      $(".dropdown-menu a").click(function(){
+        $(this).parents('.dropdown').find(".dropdown-item").removeClass("active");
+        $(this).addClass("active")
+        var selText = $(this).text();
+        $(this).parents('.dropdown').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+        var sensor_name = $(this).parents('.d-flex').find(".subheader").text().toLowerCase();
+        var hours = 0;
+        if(selText.includes("hour")){
+          hours = 1;
+        }else if(selText.includes("day")){
+          hours = 24;
+        }else if(selText.includes("week")){
+          hours = 24*7;
+        }
+
+        if(hours>0){
+          $.getJSON("{{ url_for('get_sensor_reading') }}", {sensor:sensor_name, hour:hours}, function(data) {
+            if(data.hasOwnProperty('timestamp')){
+              sensor_chart[sensor_name].data.labels = data["timestamp"];
+              sensor_chart[sensor_name].data.datasets[0].data = data[sensor_name];
+              sensor_chart[sensor_name].update();
+            }else{
+              $("#power_usage").html(data["total_power"].toFixed(2));
+            }
+          });
+        }else{
+          $.getJSON("{{ url_for('send_command') }}", {mode:selText}, function(data) {
+            console.log(data);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
